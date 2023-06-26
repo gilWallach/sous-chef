@@ -1,7 +1,8 @@
 const express = require("express")
 const cors = require("cors")
 const dotenv = require('dotenv');
-const { Configuration, OpenAIApi } = require("openai")
+const { Configuration, OpenAIApi } = require("openai");
+const { fetchRecipe } = require("./api/recipe/recipe.controller");
 
 dotenv.config();
 // let PORT
@@ -45,6 +46,7 @@ app.post(`/api/recipe`, async (req, res) => {
     res.send(response.data);
   } catch (err) {
     console.error(err);
+    res.status(400).send("Error fetching recipe")
   }
 });
 
