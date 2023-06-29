@@ -1,34 +1,37 @@
 const express = require("express")
 const cors = require("cors")
+const path = require('path')
 const dotenv = require('dotenv');
 const { Configuration, OpenAIApi } = require("openai");
-const { fetchRecipe } = require("./api/recipe/recipe.controller");
 
 dotenv.config();
-// let PORT
-// process.env.STATUS === `production`
-// ? (PORT = process.env.PROD_PORT)
-// : (PORT = process.env.DEV_PORT)
-const PORT = 8000;
+const port = process.env.PORT || 8000
 const API_KEY = process.env.API_KEY;
-const app = express("public");
+const app = express();
 
-const corsOptions = {
-  origin: [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-  ],
-  credentials: true,
-};
+if (process.env.NODE_ENV === 'production') {
+  // Express serve static files on production environment
+  app.use(express.static(path.resolve(__dirname, 'public')))
+} else {
+  // Configuring CORS
+  const corsOptions = {
+    origin: [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "http://localhost:8000",
+      "http://127.0.0.1:8000",
+    ],
+    credentials: true,
+  };
+  app.use(cors(corsOptions))
+}
+
 
 const configuration = new Configuration({
   apiKey: API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-app.use(cors(corsOptions));
 app.use(express.json());
 
 app.post(`/api/recipe`, async (req, res) => {
@@ -50,4 +53,4 @@ app.post(`/api/recipe`, async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(port, () => console.log(`Server running on port ${port}`));
