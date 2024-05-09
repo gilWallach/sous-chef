@@ -1,13 +1,15 @@
 const express = require("express")
+const bodyParser = require("body-parser");
 const cors = require("cors")
 const path = require('path')
-const dotenv = require('dotenv');
 const { Configuration, OpenAIApi } = require("openai");
+require("dotenv").config();
 
-dotenv.config();
 const port = process.env.PORT || 8000
 const API_KEY = process.env.API_KEY;
 const app = express();
+
+// app.use(bodyParser.json());
 
 if (process.env.NODE_ENV === 'production') {
   // Express serve static files on production environment
@@ -30,22 +32,47 @@ if (process.env.NODE_ENV === 'production') {
 const configuration = new Configuration({
   apiKey: API_KEY,
 });
+
 const openai = new OpenAIApi(configuration);
 
 app.use(express.json());
 
+// app.post("/api/recipe", (req, res) => {
+//   const options = {
+//     model: 'gpt-4',
+//     messages: [
+//       {
+//         role: "user",
+//         content: req.body.message
+//       }
+//     ],
+//   }
+
+//   const response = openai.createChatCompletion(options);
+
+//   response
+//     .then((result) => {
+//       // console.log('result.data.choices[0].message.content:', result.data.choices[0].message.content)
+//       res.send(result);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
+
+
 app.post(`/api/recipe`, async (req, res) => {
   const options = {
-    model: "text-davinci-003",
-    prompt: req.body.message,
-    temperature: 0.3,
-    max_tokens: 1200,
-    top_p: 1.0,
-    frequency_penalty: 0.0,
-    presence_penalty: 0.0,
+    model: 'gpt-4',
+    messages: [
+      {
+        role: "user",
+        content: req.body.message
+      }
+    ]
   }
   try {
-    const response = await openai.createCompletion(options);
+    const response = await openai.createChatCompletion(options);
     res.send(response.data);
   } catch (err) {
     console.error(err);
