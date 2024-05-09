@@ -70,7 +70,7 @@ Error generating stack: `+i.message+`
 `+t;const n=await zw.post("recipe",t);return Ww(n)}catch(t){throw console.error("Error fetching recipe"),t}}function Ww(e){const t=e.trim(),[n,...r]=t.split("Ingredients:"),[o,...i]=r.toString().split("Instructions:");let l=o.trim().split(`
 `);l=l.map(a=>a=a.substring(2));let s=i[0].trim().split(`
 
-`);return s=s.map(a=>a=a.substring(2)),{title:n.trim(),ingredients:l,instructions:s,_id:Gn.makeId()}}const Vw={recipe:null},i0=lo("recipe/fetch",async e=>{const t=Kw(),n=await Bw.query(t);return console.log(n),n}),Hw=Zg({name:"recipe",initialState:Vw,reducers:{},extraReducers:e=>{e.addCase(i0.fulfilled,(t,n)=>{t.recipe=n.payload})}}),Kw=()=>x0.getState().rootReducer.ingredient.ingredients.map(n=>n.text);var l0={exports:{}},s0={};/**
+`);return s=s.map(a=>a=a.substring(2)),{title:n.trim(),ingredients:l,instructions:s,_id:Gn.makeId()}}const Vw={recipe:null},i0=lo("recipe/fetch",async e=>{const t=Kw();return await Bw.query(t)}),Hw=Zg({name:"recipe",initialState:Vw,reducers:{},extraReducers:e=>{e.addCase(i0.fulfilled,(t,n)=>{t.recipe=n.payload})}}),Kw=()=>x0.getState().rootReducer.ingredient.ingredients.map(n=>n.text);var l0={exports:{}},s0={};/**
  * @license React
  * use-sync-external-store-shim.production.min.js
  *
